@@ -1,3 +1,2 @@
-From tomcat:8-jre8 
-
+FROM tomcat
 COPY ./target/hello-world.war /usr/local/tomcat/webapps
