@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-       imagename = "austinobioma/tomcat"
+       imagename = "seewhy007/lemonscreen"
        registryCredential = 'DockerHub'
        dockerImage = ''
            }
