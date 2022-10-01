@@ -14,6 +14,13 @@ pipeline {
         sh 'mvn clean package'
       }
     }
+    stage('Test') {
+            steps {
+                sh 'mvn test'
+                echo 'Test Analysis'
+            }
+        }
+    
     stage('Building Docker image') {
           steps{
                 script {
@@ -21,7 +28,7 @@ pipeline {
                           }
                       }
                 }
-     stage('Deploy Image') {
+     stage('Push Docker Image') {
            steps{
                script {
                     docker.withRegistry( '', registryCredential ) {
@@ -37,13 +44,19 @@ pipeline {
               sh "docker rmi $imagename:latest"
                         }
             }
+    
     stage ('Deploy To Tomcat Server') {
       steps{
         script {
-         deploy adapters: [tomcat9(credentialsId: 'Deployer', path: '', url: 'http://18.209.228.246:8080')], contextPath: '/hello-world', onFailure: false, war: '**/hello-world.war'
-      }
-     }
+         deploy adapters: [tomcat9(credentialsId: 'Tomcat_keys', path: '', url: 'http://3.144.216.115:8080/')], contextPath: 'webapp', war: '**/*.war'
+           }
+       }
    }
- }
+    stage('Deploy to QA') {
+            steps {
+                echo 'Deploy to Tomcat'
+            }
+        }        
+   }
 }
 
